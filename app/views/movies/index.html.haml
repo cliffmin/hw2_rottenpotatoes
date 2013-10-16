@@ -26,6 +26,6 @@
         %td= movie.rating
         %td= movie.release_date
         %td= link_to "More about #{movie.title}", movie_path(movie)
-%p=debug params 
-%p=debug session 
+/ %p=debug params 
+/ %p=debug session 
 = link_to 'Add new movie', new_movie_path

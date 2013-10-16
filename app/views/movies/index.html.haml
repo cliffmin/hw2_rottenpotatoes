@@ -1,19 +1,20 @@
--#  This file is app/views/movies/index.html.haml
+/  This file is app/views/movies/index.html.haml
 %h1 All Movies
-
 = form_tag movies_path, :method => :get do
-  = hidden_field_tag(:orderby, @orderby) 
   Include: 
   - @all_ratings.each do |rating|
     = rating
+    -#first argument is our id, second is our value, third argument will be checked if box is false for nil
     = check_box_tag "ratings[#{rating}]", "ratings[#{rating}]", @ratings.nil? ? false : @ratings.has_key?(rating)
+    -#first arg is our value then the second is passing the element id
   = submit_tag 'Refresh', {:id=>'ratings_submit'}
-
 %table#movies
   %thead
-    %tr
+    %tr 
+      -#set our class to hilite if orderby is true so our css gets set to hilite the element after we click on it then redirect, the class will be saved
       %th{:class=> @orderby=='title' ? 'hilite' : ''}
         =link_to "Movie Title", movies_path({:orderby=>'title',:ratings=>@ratings}), {:id=>"title_header"}
+      -#use helper method to go to our movies_path and set values, third arg is to give an id to the element
       %th Rating
       %th{:class=> @orderby=='release_date' ? 'hilite' : ''}
         =link_to "Release Date", movies_path({:orderby=>'release_date',:ratings=>@ratings}), {:id=>"release_date_header"}
@@ -25,5 +26,6 @@
         %td= movie.rating
         %td= movie.release_date
         %td= link_to "More about #{movie.title}", movie_path(movie)
-
+%p=debug params 
+%p=debug session 
 = link_to 'Add new movie', new_movie_path

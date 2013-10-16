@@ -7,13 +7,14 @@ class MoviesController < ApplicationController
   end
 
   def index
+    #if we hit this then the params will set to our stored session
+# debugger
     if params[:commit] == 'Refresh'
       session[:ratings] = params[:ratings]
     elsif session[:ratings] != params[:ratings]
       redirect = true
       params[:ratings] = session[:ratings]
     end
-
     if params[:orderby]
       session[:orderby] = params[:orderby]
     elsif session[:orderby]
@@ -21,7 +22,12 @@ class MoviesController < ApplicationController
       params[:orderby] = session[:orderby]
     end
     
-    @ratings, @orderby = session[:ratings], session[:orderby]
+    #now we create our instance varibles
+    #after setting them to session
+    
+    @ratings = session[:ratings]
+    @orderby = session[:orderby]
+
     if redirect
       redirect_to movies_path({:orderby=>@orderby, :ratings=>@ratings})
     elsif
@@ -33,7 +39,9 @@ class MoviesController < ApplicationController
         query = Movie
       end
       
+      #if true, then else 
       @movies = @ratings.nil? ? query.all : query.find_all_by_rating(@ratings.map { |r| r[0] })
+      #this will give us our rating from the model
       @all_ratings = Movie.ratings  
     end
   end
